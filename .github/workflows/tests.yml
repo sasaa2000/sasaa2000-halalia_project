@@ -31,7 +31,7 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          pytest tests \
+          python -m pytest \
             --ignore=tests/test_amazon_provider.py \
             --cov=core.configuration \
             --cov=core.logging \
