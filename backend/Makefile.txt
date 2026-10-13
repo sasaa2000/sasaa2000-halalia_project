@@ -1,0 +1,43 @@
+.PHONY: test test-fast test-cov test-html lint format type-check ci
+
+# ✅ ملاحظة #6: اختبار سريع أثناء التطوير
+test-fast:
+	pytest tests/ -q --tb=line -x
+
+# اختبار كامل
+test:
+	pytest tests/ -v
+
+# ✅ ملاحظة #5: # محلياً: بدون fail_under (مرونة أثناء التطوير)
+test-cov:
+	pytest tests/ \
+		--cov=core.configuration \
+		--cov=core.logging \
+		--cov=core.monitoring \
+		--cov-branch \
+		--no-cov-on-fail \
+		--cov-report=term-missing
+
+# تقرير HTML
+test-html:
+	pytest tests/ \
+		--cov=core.configuration \
+		--cov=core.logging \
+		--cov=core.monitoring \
+		--cov-branch \
+		--cov-report=html
+	@echo "📊 Open htmlcov/index.html"
+
+# Code Quality
+lint:
+	ruff check core/ tests/
+
+format:
+	black core/ tests/
+
+type-check:
+	mypy core/ --ignore-missing-imports
+
+# CI الكامل
+ci: lint type-check test-cov
+	@echo "✅ All checks passed!"

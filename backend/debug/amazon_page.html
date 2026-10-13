@@ -1,0 +1,19 @@
+import os
+
+debug_dir = os.path.join(
+    os.getcwd(),
+    "backend",
+    "debug"
+)
+
+os.makedirs(debug_dir, exist_ok=True)
+
+debug_file = os.path.join(
+    debug_dir,
+    "amazon_page.html"
+)
+
+with open(debug_file, "w", encoding="utf-8") as f:
+    f.write(html)
+
+print(f"Saving HTML to: {debug_file}")

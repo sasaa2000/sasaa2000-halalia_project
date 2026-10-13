@@ -1,0 +1,33 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.venv/
+env/
+
+# ===== Testing =====
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# ===== 🔐 الأسرار (لن تُرفع أبداً) =====
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ===== Runtime =====
+runtime/
+*.log
+logs/
+
+# ===== IDE =====
+.idea/
+.vscode/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db

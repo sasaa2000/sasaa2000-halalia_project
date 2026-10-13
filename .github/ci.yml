@@ -1,0 +1,59 @@
+name: HALALIA CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Lint (Ruff)
+        run: |
+          cd backend
+          ruff check core/ tests/
+
+      - name: Type Check (mypy)
+        run: |
+          cd backend
+          mypy core/ --ignore-missing-imports
+
+      # ✅ ملاحظة #5: --cov-branch + --no-cov-on-fail
+      - - name: Run Tests with Coverage  
+          run: | 
+           cd backend
+           pytest tests/ \
+            --cov=core.configuration \
+            --cov=core.logging \
+            --cov=core.monitoring \
+            --cov-branch \
+            --no-cov-on-fail \
+            --cov-report=term-missing \
+            --cov-report=xml \
+            --cov-fail-under=90   # ✅ مُعاد — يرتفع لاحقاً إلى 92 ثم 95
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: backend/coverage.xml

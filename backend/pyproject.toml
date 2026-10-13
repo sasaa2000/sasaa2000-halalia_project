@@ -1,0 +1,38 @@
+[tool.coverage.run]
+source = [
+    "core/configuration",
+    "core/logging",
+    "core/monitoring",
+]
+omit = [
+    "tests/*",
+    "*/__init__.py",
+    "*/migrations/*",
+    # ===== ملفات Legacy (غير مستخدمة) =====
+    "core/configuration/configuration_manager.py",
+    "core/logging/logging_config.py",
+    "core/logging/formatter.py",
+    "core/logging/logger.py",
+    "core/logging/log_levels.py",
+    # ===== ملفات فارغة (placeholders) =====
+    "core/logging/ai_logger.py",
+    "core/logging/audit_logger.py",
+    "core/logging/security_logger.py",
+    "core/logging/performance_logger.py",
+    "core/logging/tracing.py",
+    "core/logging/metrics.py",
+]
+branch = true
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+fail_under = 88
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if __name__ == .__main__.",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
+]

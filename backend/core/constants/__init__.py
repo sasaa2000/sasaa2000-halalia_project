@@ -1,0 +1,5 @@
+"""
+HALALIA Constants
+
+Global constants.
+"""

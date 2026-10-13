@@ -1,0 +1,5 @@
+"""
+HALALIA Interfaces
+
+Abstract classes.
+"""
