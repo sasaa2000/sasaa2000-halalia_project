@@ -1,5 +1,5 @@
 from backend.ranking.models import ProductScore
-from backend.ranking.ranking_weights import RankingWeights
+from backend.ranking.weight_engine import RankingWeights
 
 
 class ScoreCalculator:

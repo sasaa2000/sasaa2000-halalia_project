@@ -242,10 +242,9 @@ def analyze_market(
     )
 
     market_score = calculate_market_score(
-        google_trend=google_trend,
-        competition=competition,
-        novelty_score=novelty_score,
-        market_saturation=market_saturation,
+        saturation=market_saturation,
+        novelty=novelty_score,
+        google_trend=google_trend
     )
 
     return {

@@ -3,7 +3,7 @@ from backend.advanced_ai import analyze_advanced
 from backend.trend_engine import predict_trend
 from backend.competition_engine import calculate_competition
 from backend.hunter_score import calculate_hunter_score
-from backend.ranking import calculate_rank
+from backend.ranking import rank_product as calculate_rank
 from backend.winning_engine import calculate_winning_probability
 
 from backend.market_intelligence import analyze_market
@@ -46,12 +46,11 @@ def run_pipeline(product):
     )
 
     rank = calculate_rank(
-        ai["score"],
-        trend["heat_score"],
-        ai["margin"],
-        competition,
-        trend["google_trend"],
-        trend["trend_direction"]
+        ai_score=ai["score"],
+        heat_score=trend["heat_score"],
+        margin=ai["margin"],
+        competition=competition,
+        google_trend=trend["google_trend"]
     )
 
     winning_probability = calculate_winning_probability(

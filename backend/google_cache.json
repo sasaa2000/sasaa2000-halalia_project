@@ -158,5 +158,57 @@
     "wireless mini printer": {
         "google_trend": 44,
         "trend_direction": "📉 هابط"
+    },
+    "خلاط محمول": {
+        "google_trend": 3,
+        "trend_direction": "📈 صاعد"
+    },
+    "خلاط زجاجي": {
+        "google_trend": 1,
+        "trend_direction": "➡️ ثابت"
+    },
+    "غسالة وجه": {
+        "google_trend": 1,
+        "trend_direction": "➡️ ثابت"
+    },
+    "سماعات بلوتوث": {
+        "google_trend": 44,
+        "trend_direction": "📉 هابط"
+    },
+    "??? ?????": {
+        "google_trend": 6,
+        "trend_direction": "📈 صاعد"
+    },
+    "عطر نسائي": {
+        "google_trend": 67,
+        "trend_direction": "📉 هابط"
+    },
+    "سماعة بلوتوث لاسلكية": {
+        "google_trend": 2,
+        "trend_direction": "➡️ ثابت"
+    },
+    "كريم بشرة طبيعي": {
+        "google_trend": 1,
+        "trend_direction": "➡️ ثابت"
+    },
+    "خلاط مطبخ ذكي": {
+        "google_trend": 1,
+        "trend_direction": "➡️ ثابت"
+    },
+    "هدية عيد ميلاد مميزة": {
+        "google_trend": 1,
+        "trend_direction": "➡️ ثابت"
+    },
+    "عطر فاخر أصلي للنساء": {
+        "google_trend": 1,
+        "trend_direction": "➡️ ثابت"
+    },
+    "فرشاة تنظيف وجه كهربائية": {
+        "google_trend": 1,
+        "trend_direction": "➡️ ثابت"
+    },
+    "عطر نسائى": {
+        "google_trend": 1,
+        "trend_direction": "➡️ ثابت"
     }
 }

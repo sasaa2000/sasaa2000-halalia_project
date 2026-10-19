@@ -1,6 +1,6 @@
 import requests
 
-from config import API_URL, TIMEOUT
+from telegram_bot.config import API_URL, TIMEOUT
 
 
 # ==========================================

@@ -1,33 +1,52 @@
-# ===== Python =====
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Python
 __pycache__/
 *.py[cod]
+*.so
+*.egg
 *.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual Environment
 venv/
-.venv/
 env/
+ENV/
 
-# ===== Testing =====
-.pytest_cache/
-.coverage
-coverage.xml
-htmlcov/
-
-# ===== 🔐 الأسرار (لن تُرفع أبداً) =====
-.env
-.env.*
-!.env.example
-*.pem
-*.key
-
-# ===== Runtime =====
-runtime/
-*.log
-logs/
-
-# ===== IDE =====
-.idea/
+# IDE
 .vscode/
+.idea/
+*.swp
+*.swo
 
-# ===== OS =====
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+temp_images/
+*.tmp
+
+# OS
 .DS_Store
 Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Secrets
+*.key
+*.pem
+secret_key.txt
