@@ -1,92 +1,56 @@
 """
-حلالية - قاعدة البيانات مع حماية من SQL Injection
+HALALIA Database Manager - SQLite Version
+المؤسس: جمال الدين زيدان
 """
-
-import psycopg2
-from psycopg2.extras import RealDictCursor
-import logging
-import re
-
-logger = logging.getLogger(__name__)
-
+import sqlite3
+from pathlib import Path
+from typing import Optional, Any, Dict, List
 
 class Database:
-    def __init__(self, db_config):
-        self.config = db_config
-        self.connection = None
-
-    def connect(self):
-        try:
-            self.connection = psycopg2.connect(**self.config)
-            logger.info("✅ تم الاتصال بقاعدة البيانات")
-        except Exception as e:
-            logger.error(f"❌ فشل الاتصال: {e}")
-            raise
-
-    def execute_query(self, query, params=None, fetch=False):
-        """تنفيذ استعلام مع حماية قصوى من SQL Injection"""
-        try:
-            # 1. فحص أمني سريع ضد الكلمات الخطرة جداً (طبقة دفاع إضافية)
-            dangerous_keywords = ['DROP', 'TRUNCATE', 'ALTER TABLE', 'DELETE FROM products']
-            if any(keyword in query.upper() for keyword in dangerous_keywords):
-                logger.critical(f"🚫 محاولة هجوم SQL Injection مكتشفة: {query}")
-                return None if not fetch else []
-
-            with self.connection.cursor(cursor_factory=RealDictCursor) as cursor:
-                # 2. التنفيذ الآمن باستخدام params (يمنع حقن SQL تماماً)
-                cursor.execute(query, params or ())
-
-                if fetch:
-                    return cursor.fetchall()
-
-                self.connection.commit()
-                return cursor.rowcount
-        except Exception as e:
-            logger.error(f"❌ خطأ في قاعدة البيانات: {e}")
-            self.connection.rollback()
-            return None if not fetch else []
-
-    def execute_one(self, query, params=None):
-        """تنفيذ استعلام وإرجاع صف واحد"""
-        results = self.execute_query(query, params, fetch=True)
-        return results[0] if results else None
-
-    def _is_safe_query(self, query: str) -> bool:
-        """التحقق من أمان الاستعلام"""
-        # منع الكلمات الخطرة
-        dangerous_patterns = [
-            r'\bDROP\b',
-            r'\bDELETE\b.*\bFROM\b',
-            r'\bUPDATE\b.*\bSET\b',
-            r'\bINSERT\b.*\bINTO\b',
-            r'\bALTER\b',
-            r'\bTRUNCATE\b',
-            r'--',
-            r';',
-            r'\bUNION\b',
-            r'\bEXEC\b',
-            r'\bEXECUTE\b',
-        ]
-
-        query_upper = query.upper()
-        for pattern in dangerous_patterns:
-            if re.search(pattern, query_upper):
-                return False
-
-        return True
-
+    _instance: Optional['Database'] = None
+    
+    def __new__(cls) -> 'Database':
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
+    
+    def __init__(self):
+        if self._initialized:
+            return
+        self._initialized = True
+        self.db_path = Path(__file__).parent.parent / 'halalia.db'
+        self.conn: Optional[sqlite3.Connection] = None
+        self._connect()
+    
+    def _connect(self):
+        self.conn = sqlite3.connect(str(self.db_path))
+        self.conn.row_factory = sqlite3.Row
+    
+    def get_connection(self) -> sqlite3.Connection:
+        if self.conn is None:
+            self._connect()
+        return self.conn
+    
     def close(self):
-        if self.connection:
-            self.connection.close()
-            logger.info("تم إغلاق الاتصال بقاعدة البيانات")
+        if self.conn:
+            self.conn.close()
+            self.conn = None
+    
+    def execute(self, query: str, params: tuple = ()) -> sqlite3.Cursor:
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(query, params)
+        conn.commit()
+        return cursor
+    
+    def fetchall(self, query: str, params: tuple = ()) -> List[Dict[str, Any]]:
+        cursor = self.execute(query, params)
+        return [dict(row) for row in cursor.fetchall()]
+    
+    def fetchone(self, query: str, params: tuple = ()) -> Optional[Dict[str, Any]]:
+        cursor = self.execute(query, params)
+        row = cursor.fetchone()
+        return dict(row) if row else None
 
-
-# إنشاء instance عام
-db = Database({
-    'dbname': 'halalia_db',
-    'user': 'postgres',
-    'password': '2280',
-    'host': 'localhost',
-    'port': 5432
-})
-db.connect()
+db = Database()
