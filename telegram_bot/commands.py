@@ -1290,3 +1290,27 @@ async def usage_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except Exception as e:
                 logger.error(f"Error in usage_command: {e}", exc_info=True)
                 await update.message.reply_text("❌ عذراً، حدث خطأ غير متوقع.")
+async def recommend_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """عرض المنتجات الموصى بها"""
+    try:
+        from backend.db import db
+        
+        # جلب المنتجات الحلال من قاعدة البيانات
+        products = db.fetchall("SELECT name, price, rating, category FROM products WHERE status = 'halal' LIMIT 5")
+        
+        if not products:
+            await update.message.reply_text("📦 لا توجد منتجات متاحة حالياً. سنضيف منتجات جديدة قريباً!")
+            return
+        
+        response = "🌟 **منتجاتنا الموصى بها:**\n\n"
+        
+        for i, product in enumerate(products, 1):
+            response += f"{i}. **{product['name']}**\n"
+            response += f"   💰 السعر: {product['price']} ريال\n"
+            response += f"   ⭐ التقييم: {product['rating']}/5\n"
+            response += f"    الفئة: {product['category']}\n\n"
+        
+        await update.message.reply_text(response, parse_mode='Markdown')
+        
+    except Exception as e:
+        await update.message.reply_text(f"⚠️ حدث خطأ: {str(e)}")
