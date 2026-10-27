@@ -1,7 +1,8 @@
 """
-HALALIA Telegram Bot Configuration
-المؤسس: جمال الدين زيدان
+© 2026 حَلَالِيّة - ملكية فكرية حصرية لـ أ. جمال الدين زيدان
+محمية بموجب نظام حقوق المؤلف السعودي واتفاقية بيرن الدولية.
 """
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -32,13 +33,21 @@ TIMEOUT = int(os.getenv('TIMEOUT', '30'))
 REQUEST_TIMEOUT = int(os.getenv('REQUEST_TIMEOUT', '60'))
 
 # ==========================================================
-# Rate Limiting
+# Rate Limiting (الحماية من الهجمات)
 # ==========================================================
 MAX_INPUT_LENGTH = 1000
 MAX_PHOTO_SIZE = 10 * 1024 * 1024  # 10 MB
 MAX_VOICE_DURATION = 60  # seconds
 RATE_LIMIT_WINDOW = 60  # seconds
 RATE_LIMIT_MAX_CALLS = 100
+
+# إعدادات Rate Limiting المتقدمة
+RATE_LIMITS = {
+    'default': {'calls': 30, 'period': 60},   # 30 طلب/دقيقة
+    'analyze': {'calls': 10, 'period': 60},   # 10 تحليلات/دقيقة
+    'search': {'calls': 20, 'period': 60},    # 20 بحث/دقيقة
+    'admin': {'calls': 100, 'period': 60}     # 100 طلب/دقيقة للمدراء
+}
 
 # ==========================================================
 # Database
@@ -60,10 +69,13 @@ LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
 LOG_DIR = os.getenv('LOG_DIR', 'logs')
 
 # ==========================================================
-# Security
+# Security (الحماية والتشفير)
 # ==========================================================
 SECRET_KEY = os.getenv('SECRET_KEY', 'halalia-secret-key-2026')
 SYSTEM_MASTER_PIN = os.getenv('SYSTEM_MASTER_PIN', '1234')
+
+# مفتاح التشفير (لحماية البيانات الحساسة)
+ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')
 
 # ==========================================================
 # Features

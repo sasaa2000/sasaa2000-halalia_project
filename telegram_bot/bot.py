@@ -1,7 +1,8 @@
 """
-HALALIA Telegram Bot - Main Entry Point
-المؤسس: جمال الدين زيدان
+© 2026 حَلَالِيّة - ملكية فكرية حصرية لـ أ. جمال الدين زيدان
+محمية بموجب نظام حقوق المؤلف السعودي واتفاقية بيرن الدولية.
 """
+
 import asyncio
 import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -38,7 +39,13 @@ from telegram_bot.commands import (
     recommend_command,
 )
 
-from telegram_bot.handlers import handle_message
+# محاولة استيراد handlers (إذا وجدت)
+try:
+    from telegram_bot.handlers import handle_message
+    HAS_HANDLERS = True
+except ImportError:
+    HAS_HANDLERS = False
+    handle_message = None
 
 # إعداد السجلات
 logging.basicConfig(
@@ -80,11 +87,9 @@ def main():
     application.add_handler(CommandHandler("alternatives", alternatives_command))
     application.add_handler(CommandHandler("recommend", recommend_command))
     
-    # معالج الرسائل النصية
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    
-    # معالج الأزرار التفاعلية
-    # application.add_handler(CallbackQueryHandler(handle_button))
+    # معالج الرسائل النصية (إذا كان موجوداً)
+    if HAS_HANDLERS and handle_message:
+        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
     # تشغيل البوت
     print("✅ Bot Token loaded successfully")
